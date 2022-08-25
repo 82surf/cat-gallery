@@ -1,6 +1,7 @@
 class Nodes {
   constructor($app, initialState) {
     this.$target = document.createElement('div');
+    this.$target.className = 'Nodes';
     this.state = initialState;
     $app.appendChild(this.$target);
 
@@ -8,7 +9,6 @@ class Nodes {
   }
 
   render() {
-    console.log('Nodes render run');
     const nodesEl = this.state.nodes
       .map((node) => {
         const imgPath = this.getImgPath(node);
