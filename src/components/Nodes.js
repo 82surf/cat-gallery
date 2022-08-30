@@ -24,15 +24,17 @@ class Nodes {
       </div>
     `;
 
-    const nodeEls = this.state.nodes.map((node) => {
-      const imgPath = getImgpath(node);
-      return `
+    const nodeEls = this.state.nodes
+      .map((node) => {
+        const imgPath = getImgpath(node);
+        return `
         <div class="Node">
           <img src="${imgPath}" />
           <div>${node.name}</div>
         </div>
       `;
-    });
+      })
+      .join('');
 
     this.$target.innerHTML = this.state.isRoot ? nodeEls : prevEl + nodeEls;
   }
