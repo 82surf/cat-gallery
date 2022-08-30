@@ -1,5 +1,5 @@
 class Breadcrumb {
-  constructor($app, initialState) {
+  constructor({ $app, initialState }) {
     this.state = initialState;
 
     this.$target = document.createElement('nav');
@@ -7,6 +7,11 @@ class Breadcrumb {
 
     $app.appendChild(this.$target);
 
+    this.render();
+  }
+
+  setState(nextState) {
+    this.state = nextState;
     this.render();
   }
 
