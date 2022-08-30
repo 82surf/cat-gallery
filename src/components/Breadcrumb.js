@@ -20,7 +20,7 @@ class Breadcrumb {
 
     if (!this.state.isRoot) {
       breadcrumbEl += this.state.path
-        .map((item) => `<div>${item}</div>`)
+        .map((item) => `<div>${item.name}</div>`)
         .join('');
     }
 

@@ -36,7 +36,7 @@ class App {
         switch (targetNode.type) {
           case 'DIRECTORY':
             const response = await getNodes(nodeId);
-            this.state.path.push(targetNode.name);
+            this.state.path.push(targetNode);
             this.setState({
               ...this.state,
               isRoot: false,
@@ -46,6 +46,24 @@ class App {
           case 'FILE':
             console.log('click file!');
             break;
+        }
+      },
+      onClickBackBtn: async () => {
+        this.state.path.pop();
+        if (this.state.path.length === 0) {
+          const response = await getNodes();
+          this.setState({
+            ...this.state,
+            isRoot: true,
+            nodes: response,
+          });
+        } else {
+          const currNode = this.state.path[this.state.path.length - 1];
+          const response = await getNodes(currNode.id);
+          this.setState({
+            ...this.state,
+            nodes: response,
+          });
         }
       },
     });

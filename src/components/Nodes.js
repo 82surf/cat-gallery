@@ -1,12 +1,13 @@
 class Nodes {
-  constructor({ $app, initialState, onClickNode }) {
+  constructor({ $app, initialState, onClickNode, onClickBackBtn }) {
     this.state = initialState;
     this.onClickNode = onClickNode;
+    this.onClickBackBtn = onClickBackBtn;
 
     this.$target = document.createElement('div');
     this.$target.className = 'Nodes';
     $app.appendChild(this.$target);
-    this.nodeClickHandler();
+    this.nodeClickListener();
 
     this.render();
   }
@@ -30,7 +31,7 @@ class Nodes {
       .join('');
 
     const prevEl = `
-      <div class="Node">
+      <div class="Node" id="back-btn">
         <img src="./assets/prev.png" />
       </div>
     `;
@@ -49,13 +50,19 @@ class Nodes {
     }
   }
 
-  nodeClickHandler() {
+  nodeClickListener() {
     this.$target.addEventListener('click', (event) => {
-      const nodeId = event.target.dataset.id
-        ? event.target.dataset.id
-        : event.target.parentNode.dataset.id;
+      const targetEl =
+        event.target.className === 'Node'
+          ? event.target
+          : event.target.parentNode;
 
-      this.onClickNode(nodeId);
+      if (targetEl.id === 'back-btn') {
+        this.onClickBackBtn();
+      } else {
+        const nodeId = targetEl.dataset.id;
+        this.onClickNode(nodeId);
+      }
     });
   }
 }
