@@ -8,6 +8,11 @@ class Nodes {
     this.render();
   }
 
+  setState(nextState) {
+    this.state = nextState;
+    this.render();
+  }
+
   render() {
     const getImgpath = (node) => {
       switch (node.type) {

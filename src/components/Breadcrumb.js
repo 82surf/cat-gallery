@@ -8,6 +8,11 @@ class Breadcrumb {
     this.render();
   }
 
+  setState(nextState) {
+    this.state = nextState;
+    this.render();
+  }
+
   render() {
     const rootEl = `<div>root</div>`;
     const breadcrumbEls = this.state.breadcrumbList
