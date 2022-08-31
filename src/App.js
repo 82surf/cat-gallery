@@ -22,37 +22,19 @@ class App {
             targetNode = node;
           }
         }
-
         if (targetNode.type === 'DIRECTORY') {
           this.state.breadcrumbList.push(targetNode);
-          const response = await getNodes(targetNode.id);
-          this.setState({
-            ...this.state,
-            isRoot: false,
-            nodes: response,
-          });
+          this.render(targetNode.id);
         } else if (node.type === 'FILE') {
           console.log('click file!');
         }
       },
       onClickBackBtn: async () => {
-        this.state.breadcrumbList.pop();
+        const currNode = this.state.breadcrumbList.pop();
         if (this.state.breadcrumbList.length) {
-          const currNode =
-            this.state.breadcrumbList[this.state.breadcrumbList.length - 1];
-          const response = await getNodes(currNode.id);
-          this.setState({
-            ...this.state,
-            isRoot: false,
-            nodes: response,
-          });
+          this.render(currNode.parent.id);
         } else {
-          const response = await getNodes();
-          this.setState({
-            ...this.state,
-            isRoot: true,
-            nodes: response,
-          });
+          this.render();
         }
       },
     });
@@ -66,13 +48,18 @@ class App {
     this.nodes.setState(this.state);
   }
 
+  async render(nodeId) {
+    const response = await getNodes(nodeId ? nodeId : null);
+    this.setState({
+      ...this.state,
+      isRoot: nodeId ? false : true,
+      nodes: response,
+    });
+  }
+
   async init() {
     try {
-      const response = await getNodes();
-      this.setState({
-        ...this.state,
-        nodes: response,
-      });
+      this.render();
     } catch (error) {
       alert(error.message);
     }
