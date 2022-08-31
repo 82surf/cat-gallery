@@ -25,14 +25,34 @@ class App {
 
         if (targetNode.type === 'DIRECTORY') {
           this.state.breadcrumbList.push(targetNode);
-          const request = await getNodes(targetNode.id);
+          const response = await getNodes(targetNode.id);
           this.setState({
             ...this.state,
             isRoot: false,
-            nodes: request,
+            nodes: response,
           });
         } else if (node.type === 'FILE') {
           console.log('click file!');
+        }
+      },
+      onClickBackBtn: async () => {
+        this.state.breadcrumbList.pop();
+        if (this.state.breadcrumbList.length) {
+          const currNode =
+            this.state.breadcrumbList[this.state.breadcrumbList.length - 1];
+          const response = await getNodes(currNode.id);
+          this.setState({
+            ...this.state,
+            isRoot: false,
+            nodes: response,
+          });
+        } else {
+          const response = await getNodes();
+          this.setState({
+            ...this.state,
+            isRoot: true,
+            nodes: response,
+          });
         }
       },
     });

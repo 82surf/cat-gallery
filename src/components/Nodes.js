@@ -1,7 +1,8 @@
 class Nodes {
-  constructor({ $app, initialState, onClick }) {
+  constructor({ $app, initialState, onClick, onClickBackBtn }) {
     this.state = initialState;
     this.onClick = onClick;
+    this.onClickBackBtn = onClickBackBtn;
 
     this.init($app);
     this.render();
@@ -17,8 +18,12 @@ class Nodes {
         event.target.className == 'Node'
           ? event.target
           : event.target.parentNode;
-      const nodeId = targetEl.dataset.id;
-      this.onClick(nodeId);
+      if (targetEl.id === 'back-btn') {
+        this.onClickBackBtn();
+      } else {
+        const nodeId = targetEl.dataset.id;
+        this.onClick(nodeId);
+      }
     });
   }
 
@@ -38,7 +43,7 @@ class Nodes {
     };
 
     const prevEl = `
-      <div class="Node">
+      <div class="Node" id="back-btn">
         <img src="./assets/prev.png" />
       </div>
     `;
