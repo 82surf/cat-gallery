@@ -1,11 +1,25 @@
 class Nodes {
-  constructor({ $app, initialState }) {
+  constructor({ $app, initialState, onClick }) {
     this.state = initialState;
+    this.onClick = onClick;
+
+    this.init($app);
+    this.render();
+  }
+
+  init($app) {
     this.$target = document.createElement('div');
     this.$target.className = 'Nodes';
     $app.appendChild(this.$target);
 
-    this.render();
+    this.$target.addEventListener('click', (event) => {
+      const targetEl =
+        event.target.className == 'Node'
+          ? event.target
+          : event.target.parentNode;
+      const nodeId = targetEl.dataset.id;
+      this.onClick(nodeId);
+    });
   }
 
   setState(nextState) {
@@ -33,7 +47,7 @@ class Nodes {
       .map((node) => {
         const imgPath = getImgpath(node);
         return `
-        <div class="Node">
+        <div class="Node" data-id="${node.id}">
           <img src="${imgPath}" />
           <div>${node.name}</div>
         </div>

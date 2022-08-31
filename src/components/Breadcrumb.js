@@ -16,7 +16,7 @@ class Breadcrumb {
   render() {
     const rootEl = `<div>root</div>`;
     const breadcrumbEls = this.state.breadcrumbList
-      .map((breadcrumb) => `<div>${breadcrumb}</div>`)
+      .map((breadcrumb) => `<div>${breadcrumb.name}</div>`)
       .join('');
     this.$target.innerHTML = rootEl + breadcrumbEls;
   }
