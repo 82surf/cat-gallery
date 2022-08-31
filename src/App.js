@@ -1,7 +1,11 @@
 import getNodes from './lib/api';
 
+import ImageViewer from './components/ImageViewer';
 import Breadcrumb from './components/Breadcrumb';
 import Nodes from './components/Nodes';
+
+const IMG_BASE_URL =
+  'https://fe-dev-matching-2021-03-serverlessdeploymentbuck-t3kpj3way537.s3.ap-northeast-2.amazonaws.com/publ';
 
 class App {
   constructor($app) {
@@ -9,8 +13,21 @@ class App {
       isRoot: true,
       breadcrumbList: [],
       nodes: [],
+      imageFilePath: '',
+      showModal: false,
     };
 
+    this.imageViewer = new ImageViewer({
+      $app,
+      initialState: this.state,
+      closeModal: () => {
+        this.setState({
+          ...this.state,
+          imageFilePath: '',
+          showModal: false,
+        });
+      },
+    });
     this.breadcrumb = new Breadcrumb({ $app, initialState: this.state });
     this.nodes = new Nodes({
       $app,
@@ -25,8 +42,12 @@ class App {
         if (targetNode.type === 'DIRECTORY') {
           this.state.breadcrumbList.push(targetNode);
           this.render(targetNode.id);
-        } else if (node.type === 'FILE') {
-          console.log('click file!');
+        } else if (targetNode.type === 'FILE') {
+          this.setState({
+            ...this.state,
+            imageFilePath: IMG_BASE_URL + targetNode.filePath,
+            showModal: true,
+          });
         }
       },
       onClickBackBtn: async () => {
@@ -46,6 +67,7 @@ class App {
     this.state = nextState;
     this.breadcrumb.setState(this.state);
     this.nodes.setState(this.state);
+    this.imageViewer.setState(this.state);
   }
 
   async render(nodeId) {
