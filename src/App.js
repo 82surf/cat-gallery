@@ -1,5 +1,6 @@
 import getNodes from './lib/api';
 
+import Loading from './components/Loading';
 import ImageViewer from './components/ImageViewer';
 import Breadcrumb from './components/Breadcrumb';
 import Nodes from './components/Nodes';
@@ -15,8 +16,10 @@ class App {
       nodes: [],
       imageFilePath: '',
       showModal: false,
+      isLoading: false,
     };
 
+    this.loading = new Loading({ $app, initialState: this.state });
     this.imageViewer = new ImageViewer({
       $app,
       initialState: this.state,
@@ -86,14 +89,17 @@ class App {
     this.breadcrumb.setState(this.state);
     this.nodes.setState(this.state);
     this.imageViewer.setState(this.state);
+    this.loading.setState(this.state);
   }
 
   async render(nodeId) {
+    this.loading.setState({ ...this.state, isLoading: true });
     const response = await getNodes(nodeId ? nodeId : null);
     this.setState({
       ...this.state,
       isRoot: nodeId ? false : true,
       nodes: response,
+      isLoading: false,
     });
   }
 
