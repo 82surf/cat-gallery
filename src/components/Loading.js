@@ -9,7 +9,6 @@ class Loading {
 
   setState(nextState) {
     this.state = nextState;
-    console.log(this.state);
     this.toggle();
   }
 
