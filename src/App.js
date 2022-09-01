@@ -28,7 +28,25 @@ class App {
         });
       },
     });
-    this.breadcrumb = new Breadcrumb({ $app, initialState: this.state });
+    this.breadcrumb = new Breadcrumb({
+      $app,
+      initialState: this.state,
+      onClick: (nodeId) => {
+        if (nodeId) {
+          while (true) {
+            const bc = this.state.breadcrumbList;
+            if (bc[bc.length - 1].id == nodeId) {
+              break;
+            }
+            bc.pop();
+          }
+          this.render(nodeId);
+        } else {
+          this.state.breadcrumbList = [];
+          this.render();
+        }
+      },
+    });
     this.nodes = new Nodes({
       $app,
       initialState: this.state,

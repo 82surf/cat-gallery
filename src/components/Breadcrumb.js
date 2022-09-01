@@ -1,9 +1,17 @@
 class Breadcrumb {
-  constructor({ $app, initialState }) {
+  constructor({ $app, initialState, onClick }) {
     this.state = initialState;
+    this.onClick = onClick;
     this.$target = document.createElement('nav');
     this.$target.className = 'Breadcrumb';
     $app.appendChild(this.$target);
+    this.$target.addEventListener('click', (event) => {
+      const className = event.target.className;
+      const bc = this.state.breadcrumbList;
+      if (bc[bc.length - 1].id !== event.target.dataset.id) {
+        this.onClick(className === 'root' ? null : event.target.dataset.id);
+      }
+    });
 
     this.render();
   }
@@ -14,9 +22,12 @@ class Breadcrumb {
   }
 
   render() {
-    const rootEl = `<div>root</div>`;
+    const rootEl = `<div class="root">root</div>`;
     const breadcrumbEls = this.state.breadcrumbList
-      .map((breadcrumb) => `<div>${breadcrumb.name}</div>`)
+      .map(
+        (breadcrumb) =>
+          `<div data-id="${breadcrumb.id}">${breadcrumb.name}</div>`,
+      )
       .join('');
     this.$target.innerHTML = rootEl + breadcrumbEls;
   }
